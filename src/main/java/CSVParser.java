@@ -14,11 +14,11 @@ public class CSVParser {
      * @return An ArrayList of the cities. The list is populated in the same order as the cities are read in the file.
      * @throws FileNotFoundException The path to the file is invalid.
      */
-    public static List<City> parseCityList(String csvFile) throws FileNotFoundException {
+    public static ArrayList<City> parseCityList(String csvFile) throws FileNotFoundException {
         BufferedReader br = null;
         String line = "";
         int n = 0;
-        List<City> cities = new ArrayList<City>();
+        ArrayList<City> cities = new ArrayList<City>();
         try {
             br = new BufferedReader(new FileReader(csvFile));
 

@@ -16,4 +16,12 @@ public class City {
     public double getDistanceWith(City city){
         return Math.sqrt(Math.pow((this.coordinates.getX()-city.coordinates.getX()),2) + Math.pow((this.coordinates.getY()-city.coordinates.getY()),2));
     }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
 }
