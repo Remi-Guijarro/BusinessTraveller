@@ -14,6 +14,11 @@ public class BusinessTraveller {
         return ((double) Runtime.getRuntime().totalMemory() -  Runtime.getRuntime().freeMemory() ) / 1048576;
     }
 
+    public static void displayExecutionInfo(){
+        System.out.println(" Duration : " + getSecondDuration() + " seconds");
+        System.out.println(" Memory usage : " + getMemoryUsage()+ " MB ");
+    }
+
     public static void main(String[] args){
         startTimer();
         try {
@@ -21,7 +26,6 @@ public class BusinessTraveller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(" Duration : " + getSecondDuration() + " seconds");
-        System.out.println(" Memory usage : " + getMemoryUsage()+ " MB ");
+        displayExecutionInfo();
     }
 }
