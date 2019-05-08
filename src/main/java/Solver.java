@@ -2,6 +2,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Solver {
+    /**
+     * @param path , path to wanted cities file
+     * @return a naive way to solve the problem by connecting each city using the given order, once the graph is
+     *  a complete graph every city can be connected to any other, this solution don't take account of the distance
+     *  between cities or anything
+     */
     public static String naiveArrayListWay(String path){
         Route route = new Route();
         ArrayList<City> cities = null;

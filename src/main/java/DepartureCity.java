@@ -12,6 +12,10 @@ public class DepartureCity extends City {
         super(x,y,id);
     }
 
+    /**
+     * Set the city as visited only if it is visited twice as it is as DepartureCity it have to be visited twice
+     * @param state
+     */
     @Override
     public void setVisited(boolean state) {
         if(visitedCount == 2){

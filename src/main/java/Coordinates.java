@@ -7,18 +7,30 @@ public class Coordinates {
         this.y = y;
     }
 
+    /**
+     * @return the X Coordinate
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Set the X Coordinate
+     */
     public void setX(double x) {
         this.x = x;
     }
 
+    /**
+     * @return the X Coordinate
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * set Y Coordinate
+     */
     public void setY(double y) {
         this.y = y;
     }
