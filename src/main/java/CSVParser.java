@@ -17,7 +17,7 @@ public class CSVParser {
     public static ArrayList<City> parseCityList(String csvFile) throws FileNotFoundException {
         BufferedReader br = null;
         String line = "";
-        int n = 0;
+        int n = 1;
         ArrayList<City> cities = new ArrayList<City>();
         try {
             br = new BufferedReader(new FileReader(csvFile));
@@ -40,7 +40,7 @@ public class CSVParser {
                 y = Double.valueOf(coordinates[1]);
 
                 // Create the city
-                City city = new City(new Coordinates(x,y));
+                City city = new City(new Coordinates(x,y),count);
                 // Add the city to the list
                 cities.add(city);
 

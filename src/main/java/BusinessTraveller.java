@@ -21,11 +21,7 @@ public class BusinessTraveller {
 
     public static void main(String[] args){
         startTimer();
-        try {
-            Thread.sleep(345);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println(Solver.naiveArrayListWay("C:\\Users\\Rémi\\Documents\\Ensiie\\AdvancedProgramming\\BusinessTraveller\\src\\main\\resources\\data\\test10.csv") + "\n");
         displayExecutionInfo();
     }
 }
