@@ -3,6 +3,7 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +15,7 @@ public class CSVParserTest {
         // Get the absolute path
         String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
 
-        ArrayList<City> cities = null;
+        Map<Integer,City> cities = null;
         try {
             cities = CSVParser.parseCityList(csv);
         } catch (FileNotFoundException e) {

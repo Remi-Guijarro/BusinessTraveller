@@ -1,28 +1,41 @@
+import org.paukov.combinatorics3.Generator;
+
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Solver {
     /**
      * @param path , path to wanted cities file
-     * @return a naive way to solve the problem by connecting each city using the given order, once the graph is
-     *  a complete graph every city can be connected to any other, this solution don't take account of the distance
-     *  between cities or anything
+     * @return
      */
     public static String naiveArrayListWay(String path){
-        Route route = new Route();
-        ArrayList<City> cities = null;
+        TreeMap<Integer,City> cities = null;
+        List<List<Integer>> parcours = null;
+        int bestParcour = 0;
+        int bestDistance = Integer.MAX_VALUE;
         try {
             try {
                 cities = CSVParser.parseCityList(path);
-                DepartureCity departureCity = new DepartureCity(cities.get(0).getCoordinates(),1);
-                route.addDeparture(departureCity);
-                cities.stream().filter(item -> item.getid() > departureCity.getid()).forEach( item -> {
-                    if(!item.getVisited()){
-                        item.setVisited(true);
-                        route.addCity(item);
+                Route standardRoute = new Route(cities);
+                parcours = Generator.permutation(standardRoute.getCities().subMap(2, standardRoute.getCities().size()+1).keySet())
+                        .simple()
+                        .stream()
+                        .collect(Collectors.toList());
+                System.out.println(parcours.size());
+                for(int i =0 ; i < parcours.size() ; i++){
+                    int distance = 0;
+                    parcours.get(i).add(0,1);
+                    parcours.get(i).add(1);
+                    for(int parcour = 1 ; parcour < parcours.get(i).size()-1 ; parcour++){
+                        distance += standardRoute.getCities().get(parcour).getDistanceWith(standardRoute.getCities().get(parcour+1));
                     }
-                });
-                route.addArrival();
+                    System.out.println(parcours.get(i) + " distance " + distance);
+                    if(distance < bestDistance){
+                        bestDistance = distance;
+                        bestParcour = i;
+                    }
+                }
             } catch (FileNotFoundException e) {
                 System.err.println("An error append while reading csv file");
                 e.printStackTrace();
@@ -31,6 +44,6 @@ public class Solver {
             System.err.println("An error append while getting cities");
             n.printStackTrace();
         }
-        return route.toString() + " \n Distance : "+ route.getDistance();
+        return parcours.get(bestParcour).toString() +" : distance  => " + bestDistance;
     }
 }

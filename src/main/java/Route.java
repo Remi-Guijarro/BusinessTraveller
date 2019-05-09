@@ -1,47 +1,28 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Route {
-    private ArrayList<City> cities;
+    private TreeMap<Integer,City> cities;
     private double distance;
 
-
-    public Route(){cities = new ArrayList<>(); this.distance = 0;}
+    public Route(TreeMap<Integer,City> cities){this.cities = cities; this.distance = 0;}
 
     /**
      * Add the departure city to the route
-     * @param c
+     * @param
      */
-    public void addDeparture(City c){addCity(c);}
+    /*public void addDeparture(City c){addCity(c);}*/
 
-
+    public TreeMap<Integer,City> getCities(){return cities;}
     /**
      * Add a city to the route
      * @param c
      */
-    public void addCity(City c){updateDistance(c); this.cities.add(c);}
-
-
-    /**
-     * Add the arrival, it takes no arguments as the arrival city have to be the same as the DepartureCity
-     */
-    public void addArrival(){addCity(cities.get(0));}
-
-    /**
-     * @return the cities list
-     */
-    public ArrayList<City> getCities(){return cities;}
+    public void addCity(City c){ this.cities.put(c.getid(),c);}
 
     /**
      * update the distance of the route by adding the distance between the last point and the new added city
      * @param city
      */
-    private void updateDistance(City city){
-        if(cities.size() <= 0)
-            distance += 0;
-        else
-            distance += cities.get(cities.size()-1).getDistanceWith(city);
-    }
 
     /**
      * @return the distance of the route
@@ -51,7 +32,7 @@ public class Route {
     @Override
     public String toString() {
         StringBuilder st = new StringBuilder(" Route : ");
-        cities.forEach(city ->  st.append(city.getid() + "-"));
+        cities.forEach( (key ,city) ->  st.append(key + "-"));
         return st.toString().substring(0,st.toString().length()-1);
     }
 }
