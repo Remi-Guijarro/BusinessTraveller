@@ -52,4 +52,9 @@ public class City {
     public Coordinates getCoordinates() {
         return coordinates;
     }
+
+    @Override
+    public String toString() {
+        return new String("La ville numéro"+this.id+" ayant pour cord"+this.getCoordinates().getX() + ";" + this.getCoordinates().getY());
+    }
 }
