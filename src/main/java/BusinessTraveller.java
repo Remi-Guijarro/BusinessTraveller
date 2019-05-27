@@ -35,5 +35,11 @@ public class BusinessTraveller {
         startTimer();
         System.out.println(Solver.naiveArrayListWay("C:\\Users\\Rémi\\Documents\\Ensiie\\AdvancedProgramming\\BusinessTraveller\\src\\main\\resources\\data\\test10.csv") + "\n");
         displayExecutionInfo();
+
+        System.out.println("--------------------------------------------------------------------------------------------");
+
+        startTimer();
+        System.out.println(Solver.naiveWithoutSymetrieDoublon("C:\\Users\\Rémi\\Documents\\Ensiie\\AdvancedProgramming\\BusinessTraveller\\src\\main\\resources\\data\\test10.csv") + "\n");
+        displayExecutionInfo();
     }
 }

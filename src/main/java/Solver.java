@@ -1,22 +1,11 @@
 import org.paukov.combinatorics3.Generator;
-import org.paukov.combinatorics3.PermutationGenerator;
 
 import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Solver {
-
-    public class HashReverseSet extends HashSet<ArrayList<Integer>>{
-
-        public void addReverse(ArrayList<Integer> toadd) {
-            if(!this.contains(toadd)) {
-
-            }
-        }
-
-    }
 
     public static String naiveArrayListWay(String path){
         TreeMap<Integer,City> cities = null;
@@ -56,5 +45,42 @@ public class Solver {
             n.printStackTrace();
         }
         return parcours.get(bestParcour).toString() +" : distance  => " + bestDistance;
+    }
+
+    public static String naiveWithoutSymetrieDoublon(String path){
+        TreeMap<Integer,City> cities = null;
+        try {
+            cities = CSVParser.parseCityList(path);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Route standardRoute = new Route(cities);
+        HashMap<Double,List<Integer>> set = new HashMap<>();
+        Generator.permutation(standardRoute.getCities().subMap(2, standardRoute.getCities().size()+1).keySet())
+                .simple()
+                .stream()
+                .forEach(item -> {
+                    if(!set.containsKey(item)){
+                        Collections.reverse(item);
+                        if(!set.containsKey(item)){
+                            item.add(0,1);
+                            item.add(1);
+                            double distance = 0;
+                            for(int z = 0 ; z< item.size() -1; z++) {
+                                distance += standardRoute.getCities().get(item.get(z)).getDistanceWith(standardRoute.getCities().get(item.get(z+1)));
+                            }
+                            set.put(distance,item);
+                        }
+                    }
+                });
+        ArrayList<Double> a =  new ArrayList<>(set.keySet());
+        Collections.sort(a);
+        double bestDistance = a.get(0);
+        StringBuilder st =  new StringBuilder();
+        set.get(bestDistance).stream().forEach(item -> {
+            st.append(item + "-");
+        });
+        st.append(" : distance => " + bestDistance);
+        return st.toString();
     }
 }
