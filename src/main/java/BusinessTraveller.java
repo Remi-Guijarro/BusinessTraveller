@@ -1,6 +1,11 @@
+import java.io.FileNotFoundException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
 public class BusinessTraveller {
 
     private static double startTime;
+    private static String executionInfo;
 
     /**
      * start a timer in milli second
@@ -24,22 +29,36 @@ public class BusinessTraveller {
     }
 
     /**
-     * Display the duration and memory usage
+     * Store the duration and memory usage
      */
-    public static void displayExecutionInfo(){
-        System.out.println(" Duration : " + getSecondDuration() + " seconds");
-        System.out.println(" Memory usage : " + getMemoryUsage()+ " MB ");
+    private static void storeExecutionInfo(){
+        executionInfo = " Duration : " + getSecondDuration() + " seconds\n" +
+                        " Memory usage : " + getMemoryUsage()+ " MB ";
     }
 
     public static void main(String[] args){
-        startTimer();
-        System.out.println(Solver.naiveArrayListWay("C:\\Users\\Rémi\\Documents\\Ensiie\\AdvancedProgramming\\BusinessTraveller\\src\\main\\resources\\data\\test10.csv") + "\n");
-        displayExecutionInfo();
 
         System.out.println("--------------------------------------------------------------------------------------------");
+        System.out.println("Question 1: naive solution");
+        System.out.println("--------------------------------------------------------------------------------------------");
 
+        String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
+        ArrayList<City> cities = null;
+        try {
+            cities = CSVParser.parseCityList(csv);
+        } catch (FileNotFoundException e) {
+            System.err.println("File " + csv + " do not exist.");
+            return;
+        }
         startTimer();
-        System.out.println(Solver.naiveWithoutSymetrieDoublon("C:\\Users\\Rémi\\Documents\\Ensiie\\AdvancedProgramming\\BusinessTraveller\\src\\main\\resources\\data\\test10.csv") + "\n");
-        displayExecutionInfo();
+        assert cities != null;
+        Result r = Solver.naiveSolution(cities, cities.get(0));
+        storeExecutionInfo();
+        System.out.println("Solution:");
+        System.out.println(" "+r.getCourse());
+        System.out.println(" Distance: "+r.getDistance());
+        System.out.println("Performance:");
+        System.out.println(executionInfo);
+
     }
 }

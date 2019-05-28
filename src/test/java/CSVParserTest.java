@@ -2,7 +2,6 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -17,7 +16,7 @@ public class CSVParserTest {
 
         Map<Integer,City> cities = null;
         try {
-            cities = CSVParser.parseCityList(csv);
+            cities = CSVParser.parseCityTreeMap(csv);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

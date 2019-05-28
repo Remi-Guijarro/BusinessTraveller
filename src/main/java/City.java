@@ -1,7 +1,8 @@
-public class City {
+public class City implements Comparable<City>{
     private Coordinates coordinates;
     private int id;
     private boolean visited;
+    private static int lastId = 0;
 
     public City() {
         this.coordinates = new Coordinates(0,0);
@@ -9,7 +10,12 @@ public class City {
         this.id = 1;
     }
 
-    public City(Coordinates coord,int id) {
+    public City(Coordinates coord) {
+        this.coordinates = coord;
+        id = ++lastId;
+    }
+
+    public City(Coordinates coord, int id) {
         this.coordinates = coord;
         this.id = id;
     }
@@ -55,6 +61,11 @@ public class City {
 
     @Override
     public String toString() {
-        return new String("La ville numéro"+this.id+" ayant pour cord"+this.getCoordinates().getX() + ";" + this.getCoordinates().getY());
+        //return new String("La ville numéro"+this.id+" ayant pour cord"+this.getCoordinates().getX() + ";" + this.getCoordinates().getY());
+        return String.valueOf(id);
+    }
+    @Override
+    public int compareTo(City o) {
+        return Integer.compare(this.id, o.id);
     }
 }
