@@ -47,7 +47,7 @@ public class CSVParser {
                 }
 
                 // Add the city to the Map
-                cities.put(city.getid(),city);
+                cities.put(city.getId(),city);
 
                 count++;
             }

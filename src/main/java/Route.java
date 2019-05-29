@@ -17,7 +17,7 @@ public class Route {
      * Add a city to the route
      * @param c
      */
-    public void addCity(City c){ this.cities.put(c.getid(),c);}
+    public void addCity(City c){ this.cities.put(c.getId(),c);}
 
     /**
      * update the distance of the route by adding the distance between the last point and the new added city

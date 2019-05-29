@@ -1,14 +1,8 @@
 public class City implements Comparable<City>{
     private Coordinates coordinates;
     private int id;
-    private boolean visited;
+    private boolean visited = false;
     private static int lastId = 0;
-
-    public City() {
-        this.coordinates = new Coordinates(0,0);
-        this.visited = false;
-        this.id = 1;
-    }
 
     public City(Coordinates coord) {
         this.coordinates = coord;
@@ -28,14 +22,14 @@ public class City implements Comparable<City>{
     /**
      * @return True if the city had been visited false otherwise
      */
-    public boolean getVisited(){
+    public boolean isVisited(){
         return this.visited;
     }
 
     /**
      * @return the id of the city
      */
-    public int getid(){return id;}
+    public int getId(){return id;}
 
     /**
      * Set the city as visited
@@ -61,9 +55,9 @@ public class City implements Comparable<City>{
 
     @Override
     public String toString() {
-        //return new String("La ville numéro"+this.id+" ayant pour cord"+this.getCoordinates().getX() + ";" + this.getCoordinates().getY());
         return String.valueOf(id);
     }
+
     @Override
     public int compareTo(City o) {
         return Integer.compare(this.id, o.id);

@@ -1,8 +1,4 @@
-import org.paukov.combinatorics3.Generator;
-
-import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 final class Result {
@@ -25,7 +21,7 @@ final class Result {
 
 public class Solver {
     /**********PERMUTATION: LEXICOGRAPHICAL ORDER**********/
-    public static ArrayList<ArrayList<City>> permutationNoMirror(
+    private static ArrayList<ArrayList<City>> permutationNoMirror(
             ArrayList<City> cities) {
 
         ArrayList<ArrayList<City>> result = new ArrayList<>();
@@ -65,8 +61,7 @@ public class Solver {
         }
         return result;
     }
-
-    /**********QUESTION 1: NAIVE SOLUTION**********/
+    /**********NAIVE SOLUTION**********/
     public static Result naiveSolution(ArrayList<City> cities, City departure) {
         //Create permutations (mirrors excluded) of all cities except departure
         //i.e. all possible courses
@@ -95,80 +90,37 @@ public class Solver {
         return new Result(shortestCourse, shortestDistance);
     }
 
-    /*public static String naiveArrayListWay(String path){
-        TreeMap<Integer,City> cities = null;
-        List<List<Integer>> parcours = null;
-        int bestParcour = 0;
-        double bestDistance = Integer.MAX_VALUE;
-        try {
-            try {
-                cities = CSVParser.parseCityTreeMap(path);
-                Route standardRoute = new Route(cities);
-                parcours = Generator.permutation(standardRoute.getCities().subMap(2, standardRoute.getCities().size()+1).keySet())
-                        .simple()
-                        .stream()
-                        .collect(Collectors.toList());
-                for(int i =0 ; i < parcours.size() ; i++){
-                    HashSet<ArrayList<Integer>> calculated = new HashSet<>();
-                    double distance = 0;
-                    parcours.get(i).add(0,1);
-                    parcours.get(i).add(1);
-                    for(int z = 0 ; z< parcours.get(i).size() -1; z++) {
-                        distance += standardRoute.getCities().get(parcours.get(i).get(z)).getDistanceWith(standardRoute.getCities().get(parcours.get(i).get(z+1)));
-                        if(distance > bestDistance) {
-                            break;
-                        }
-                    }
-                    if(distance < bestDistance){
-                        bestDistance = distance;
-                        bestParcour = i;
+    /**********1ST HEURISTIC: NEAREST NEIGHBOR**********/
+    public static Result nearestNeighbor(ArrayList<City> cities, City departure) {
+        double totalDistance = 0;
+        ArrayList<City> course = new ArrayList<>();
+        course.add(departure);
+
+        while(cities.size() > 1) {
+            City current = course.get(course.size()-1); //current city is the last city of the course
+            City next = null;
+
+            double minDistance = Double.MAX_VALUE;
+            for (City c : cities) {
+                if (!current.equals(c)) {
+                    double currentDistance = current.getDistanceWith(c);
+                    if (currentDistance < minDistance) {
+                        minDistance = currentDistance;
+                        next = c;
                     }
                 }
-            } catch (FileNotFoundException e) {
-                System.err.println("An error append while reading csv file");
-                e.printStackTrace();
             }
-        } catch (NullPointerException n){
-            System.err.println("An error append while getting cities");
-            n.printStackTrace();
+
+            assert next != null;
+            course.add(next);
+            totalDistance += minDistance;
+            cities.remove(current);
         }
-        return parcours.get(bestParcour).toString() +" : distance  => " + bestDistance;
+
+        totalDistance+=departure.getDistanceWith(course.get(course.size()-1));
+        course.add(departure);
+
+        return new Result(course, totalDistance);
     }
 
-    public static String naiveWithoutSymetrieDoublon(String path){
-        TreeMap<Integer,City> cities = null;
-        try {
-            cities = CSVParser.parseCityTreeMap(path);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Route standardRoute = new Route(cities);
-        HashMap<Double,List<Integer>> set = new HashMap<>();
-        Generator.permutation(standardRoute.getCities().subMap(2, standardRoute.getCities().size()+1).keySet())
-                .simple()
-                .stream()
-                .forEach(item -> {
-                    if(!set.containsKey(item)){
-                        Collections.reverse(item);
-                        if(!set.containsKey(item)){
-                            item.add(0,1);
-                            item.add(1);
-                            double distance = 0;
-                            for(int z = 0 ; z< item.size() -1; z++) {
-                                distance += standardRoute.getCities().get(item.get(z)).getDistanceWith(standardRoute.getCities().get(item.get(z+1)));
-                            }
-                            set.put(distance,item);
-                        }
-                    }
-                });
-        ArrayList<Double> a =  new ArrayList<>(set.keySet());
-        Collections.sort(a);
-        double bestDistance = a.get(0);
-        StringBuilder st =  new StringBuilder();
-        set.get(bestDistance).stream().forEach(item -> {
-            st.append(item + "-");
-        });
-        st.append(" : distance => " + bestDistance);
-        return st.toString();
-    }*/
 }
