@@ -45,8 +45,8 @@ public class BusinessTraveller {
     }
 
     public static void main(String[] args){
-        String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
-        //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/ulysses16.csv";
+        //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
+        String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/burma12.csv";
         ArrayList<City> cities = null;
         try {
             cities = CSVParser.parseCityList(csv);
@@ -56,28 +56,37 @@ public class BusinessTraveller {
         }
         assert cities != null;
 
-        System.out.println("--------------------------------------------------------------------------------------------");
+        /*System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("Naive solution");
         System.out.println("--------------------------------------------------------------------------------------------");
         startTimer();
         Result r1 = Solver.naiveSolution(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
-        displayResult(r1);
+        displayResult(r1);*/
+
+        System.out.println("--------------------------------------------------------------------------------------------");
+        System.out.println("Naive solution threaded");
+        System.out.println("--------------------------------------------------------------------------------------------");
+        startTimer();
+        Result r2 = Solver.naiveSolutionThreaded(new ArrayList<>(cities), cities.get(0));
+        storeExecutionInfo();
+        displayResult(r2);
+
 
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("First heuristic: nearest neighbour");
         System.out.println("--------------------------------------------------------------------------------------------");
         startTimer();
-        Result r2 = Solver.nearestNeighborSolution(new ArrayList<>(cities), cities.get(0));
+        Result r3 = Solver.nearestNeighborSolution(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
-        displayResult(r2);
+        displayResult(r3);
 
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("Second heuristic: no intersection -> planar graph");
         System.out.println("--------------------------------------------------------------------------------------------");
         startTimer();
-        Result r3 = Solver.planarGraphSolution(new ArrayList<>(cities), cities.get(0));
+        Result r4 = Solver.planarGraphSolution(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
-        displayResult(r3);
+        displayResult(r4);
     }
 }

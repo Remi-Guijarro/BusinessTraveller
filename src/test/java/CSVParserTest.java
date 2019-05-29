@@ -41,7 +41,5 @@ public class CSVParserTest {
         assertEquals(7.2, current.getCoordinates().getX(), delta);
         assertEquals(16.23, current.getCoordinates().getY(), delta);
 
-
-
     }
 }

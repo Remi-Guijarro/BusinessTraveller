@@ -1,6 +1,41 @@
+import sun.nio.ch.ThreadPool;
+
 import java.awt.geom.Line2D;
 import java.util.*;
 import java.util.stream.LongStream;
+
+final class CourseRunnable implements Runnable{
+    public Result result;
+    private ArrayList<ArrayList<City>> permutations;
+    private City departure;
+
+    public CourseRunnable( ArrayList<ArrayList<City>> permutations, City departure) {
+        this.permutations = permutations;
+        this.departure = departure;
+    }
+
+    @Override
+    public void run() {
+        ArrayList<City> shortestCourse = null;
+        double shortestDistance = Double.MAX_VALUE;
+        //Compute distance for all courses
+        for(ArrayList<City> course : permutations) {
+            course.add(departure);
+            double distance = 0;
+            City previous = departure;
+            for(City c : course) {
+                distance += previous.getDistanceWith(c);
+                previous = c;
+            }
+            if (distance < shortestDistance) {
+                shortestDistance = distance;
+                shortestCourse = course;
+            }
+        }
+        shortestCourse.add(0, departure);
+        this.result = new Result(shortestCourse, shortestDistance);
+    }
+}
 
 final class Result {
     private final ArrayList<City> course;
@@ -91,6 +126,49 @@ public class Solver {
         return new Result(shortestCourse, shortestDistance);
     }
 
+
+    /************************ NAIVE SOLUTION THREAD ***********************/
+
+
+    /**********NAIVE SOLUTION**********/
+    public static Result naiveSolutionThreaded(ArrayList<City> cities, City departure) {
+        //Create permutations (mirrors excluded) of all cities except departure
+        //i.e. all possible courses
+        cities.remove(departure);
+
+        ArrayList<ArrayList<City>> permutations = permutationNoMirror(cities);
+        /* IMPROVING */
+        /*for(int i = 0 ; i < 4 ; i++){
+            CourseRunnable courseRunnable = new CourseRunnable(new ArrayList<>(permutations.subList(permutations.size() * i,permutations.size() *(i+1/4))),departure);
+
+        }*/
+        CourseRunnable first = new CourseRunnable(new ArrayList<>(permutations.subList(0,permutations.size() *1/4)),departure);
+        CourseRunnable second = new CourseRunnable(new ArrayList<>(permutations.subList(permutations.size() * 1/4,permutations.size() * 2/4)) ,departure);
+        CourseRunnable third = new CourseRunnable(new ArrayList<>(permutations.subList(permutations.size()* 2/4,permutations.size() * 3/4)) ,departure);
+        CourseRunnable fourth  = new CourseRunnable(new ArrayList<>(permutations.subList(permutations.size()* 3/4,permutations.size() * 4/4)) ,departure);
+
+        Thread th1 = new Thread(first);
+        Thread th2 = new Thread(second);
+        Thread th3 = new Thread(third);
+        Thread th4 = new Thread(fourth);
+        th1.run();
+        th2.run();
+        th3.run();
+        th4.run();
+        try {
+            th1.join();
+            th2.join();
+            Result firstBest = first.result.getDistance() > second.result.getDistance() ? second.result : first.result;
+            th3.join();
+            th4.join();
+            Result secondBest = third.result.getDistance() > fourth.result.getDistance() ? fourth.result : third.result;
+            return firstBest.getDistance() > secondBest.getDistance() ? secondBest : firstBest;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**********1ST HEURISTIC: NEAREST NEIGHBOR**********/
     public static Result nearestNeighborSolution(ArrayList<City> cities, City departure) {
         double totalDistance = 0;
@@ -178,4 +256,16 @@ public class Solver {
         return new Result(course, newDistance);
 
     }
+
+
+    /**************************GENETIC ALGORITHM ***********************************/
+
+    public static Result geneticAlgorithm(ArrayList<City> cities, City departure){
+        // Initialize the staring generation with the best generation we could have, with the planarGraphSolution
+        ArrayList<City> startGeneration = planarGraphSolution(cities,departure).getCourse();
+        return null;
+    }
+
 }
+
+
