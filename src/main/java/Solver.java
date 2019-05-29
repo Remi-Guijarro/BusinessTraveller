@@ -1,3 +1,4 @@
+import java.awt.geom.Line2D;
 import java.util.*;
 import java.util.stream.LongStream;
 
@@ -91,7 +92,7 @@ public class Solver {
     }
 
     /**********1ST HEURISTIC: NEAREST NEIGHBOR**********/
-    public static Result nearestNeighbor(ArrayList<City> cities, City departure) {
+    public static Result nearestNeighborSolution(ArrayList<City> cities, City departure) {
         double totalDistance = 0;
         ArrayList<City> course = new ArrayList<>();
         course.add(departure);
@@ -123,4 +124,58 @@ public class Solver {
         return new Result(course, totalDistance);
     }
 
+    /**check intersection**/
+    private static boolean intersect(double x1, double y1,
+                                     double x2, double y2,
+                                     double x3, double y3,
+                                     double x4, double y4) {
+        //Initialize two lines
+        Line2D.Double l1 = new Line2D.Double(x1,y1,x2,y2);
+        Line2D.Double l2 = new Line2D.Double(x3,y3,x4,y4);
+
+        //exclude case when lines are equal (i.e. same coordinates)
+        if (l1.getP1().equals(l2.getP1()) &&
+                l1.getP2().equals(l2.getP2()))
+            return false;
+
+        //exclude case when lines have a commun point (i.e. they do not actually intersect)
+        if (l1.getP2().equals(l2.getP1()) || l1.getP1().equals(l2.getP2()))
+            return false;
+
+        return Line2D.linesIntersect(x1,y1,x2,y2,x3,y3,x4,y4);
+    }
+
+    /**********2ND HEURISTIC: PLANAR GRAPH**********/
+    public static Result planarGraphSolution(ArrayList<City> cities, City departure) {
+        Result r = nearestNeighborSolution(cities, departure);
+        ArrayList<City> course = r.getCourse();
+
+        for(int i=0; i<course.size()-1; ++i) {
+            City c1 = course.get(i), c2 = course.get(i+1);
+            double x1 = c1.getCoordinates().getX(), y1 = c1.getCoordinates().getY(),
+                    x2 = c2.getCoordinates().getX(), y2 = c2.getCoordinates().getY();
+            for(int j=0; j<course.size()-1; ++j) {
+                City c3 = course.get(j), c4 = course.get(j+1);
+                double x3 = c3.getCoordinates().getX(), y3 = c3.getCoordinates().getY(),
+                        x4 = c4.getCoordinates().getX(), y4 = c4.getCoordinates().getY();
+                if (intersect(x1,y1,x2,y2,x3,y3,x4,y4)) {
+                    //System.out.println(c1+"-"+c2+" croise "+c3+"-"+c4);
+                    Collections.swap(course,course.indexOf(c2), course.indexOf(c3));
+                    //System.out.println(course);
+                    //restart loop
+                    i=0;
+                    break;
+                }
+            }
+        }
+
+        //compute new distance
+        double previousDistance = r.getDistance(), newDistance = 0;
+        for (int i=0 ; i<course.size()-1 ; ++i) {
+            newDistance += course.get(i).getDistanceWith(course.get(i+1));
+        }
+
+        return new Result(course, newDistance);
+
+    }
 }

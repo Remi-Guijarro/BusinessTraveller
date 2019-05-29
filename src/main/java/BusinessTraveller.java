@@ -1,8 +1,6 @@
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 public class BusinessTraveller {
 
@@ -38,8 +36,17 @@ public class BusinessTraveller {
                         " Memory usage : " + getMemoryUsage()+ " MB ";
     }
 
+    private static void displayResult(Result r) {
+        System.out.println("Solution:");
+        System.out.println(" "+r.getCourse());
+        System.out.println(" Distance: "+r.getDistance());
+        System.out.println("Performance:");
+        System.out.println(executionInfo);
+    }
+
     public static void main(String[] args){
         String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
+        //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/ulysses16.csv";
         ArrayList<City> cities = null;
         try {
             cities = CSVParser.parseCityList(csv);
@@ -49,35 +56,28 @@ public class BusinessTraveller {
         }
         assert cities != null;
 
-        ArrayList<City> sub = new ArrayList<City>(cities.subList(0,4));
-
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("Naive solution");
         System.out.println("--------------------------------------------------------------------------------------------");
         startTimer();
         Result r1 = Solver.naiveSolution(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
-        System.out.println("Solution:");
-        System.out.println(" "+r1.getCourse());
-        System.out.println(" Distance: "+r1.getDistance());
-        System.out.println("Performance:");
-        System.out.println(executionInfo);
+        displayResult(r1);
 
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("First heuristic: nearest neighbour");
         System.out.println("--------------------------------------------------------------------------------------------");
         startTimer();
-        Result r2 = Solver.nearestNeighbor(new ArrayList<>(cities), cities.get(0));
+        Result r2 = Solver.nearestNeighborSolution(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
-        System.out.println("Solution:");
-        System.out.println(" "+r2.getCourse());
-        System.out.println(" Distance: "+r2.getDistance());
-        System.out.println("Performance:");
-        System.out.println(executionInfo);
+        displayResult(r2);
 
-        /*for (City c : r2.getCourse()) {
-            System.out.print(c.getId());
-            System.out.print("-");
-        }*/
+        System.out.println("--------------------------------------------------------------------------------------------");
+        System.out.println("Second heuristic: no intersection -> planar graph");
+        System.out.println("--------------------------------------------------------------------------------------------");
+        startTimer();
+        Result r3 = Solver.planarGraphSolution(new ArrayList<>(cities), cities.get(0));
+        storeExecutionInfo();
+        displayResult(r3);
     }
 }
