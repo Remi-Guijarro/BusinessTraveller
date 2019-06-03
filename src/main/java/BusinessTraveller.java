@@ -97,7 +97,7 @@ public class BusinessTraveller {
         System.out.println("Third heuristic: genetic algorithm");
         System.out.println("--------------------------------------------------------------------------------------------");
         startTimer();
-        Result r5 = Solver.geneticSolution(new ArrayList<>(cities), cities.get(0), 100, 20, 0.01, 1000);
+        Result r5 = Solver.geneticSolution(new ArrayList<>(cities), cities.get(0), 50, 20, 0.01, 500);
         storeExecutionInfo();
         displayResult(r5);
 

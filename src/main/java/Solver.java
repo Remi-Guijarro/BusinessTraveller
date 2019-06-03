@@ -383,8 +383,11 @@ public class Solver {
         int startGene = Math.min(geneA, geneB);
         int endGene = Math.max(geneA, geneB);
 
+        //explicitely add departure
+        childP1.add(parent1.get(0));
         for (int i=startGene ; i<endGene ; ++i) {
-            childP1.add(parent1.get(i));
+            if (i!=0)
+                childP1.add(parent1.get(i));
         }
 
         for (City c : childP1) {
@@ -426,11 +429,11 @@ public class Solver {
     }
 
     private static ArrayList<City> mutate(ArrayList<City> individual, double mutationRate) {
-        for (int swapped=0 ; swapped<individual.size() ; ++swapped) {
+        for (int swapped=1 ; swapped<individual.size() ; ++swapped) {
             if (Math.random() < mutationRate) {
                 int swapWith = (int) (Math.random()*individual.size());
-
-                Collections.swap(individual, swapped, swapWith);
+                if (swapWith != 0)
+                    Collections.swap(individual, swapped, swapWith);
             }
         }
         return individual;
@@ -465,31 +468,16 @@ public class Solver {
             pop = nextGeneration(pop, eliteSize, mutationRate);
         }
 
-        //System.out.println("final distance: "+1/(Double)rankRoutes(pop).values().toArray()[0]);
-        //Set<Integer> keys = rankRoutes(pop).keySet();
-        //Integer[] routesIndex = keys.toArray(new Integer[keys.size()]);
+        //System.out.println(pop);
+        HashMap rankedPop = rankRoutes(pop);
+        //System.out.println(rankedPop);
 
-        ArrayList<ArrayList<City>> bestRoutes = (ArrayList<ArrayList<City>>) pop
-                .stream()
-                .filter(x -> x.get(0) == departure)
-                .collect(Collectors.toList());
+        int bestRouteIndex = (int) rankedPop.keySet().toArray()[0];
+        ArrayList<City> bestRoute = pop.get(bestRouteIndex);
+        double distance = new Fitness(bestRoute).routeDistance();
 
-        //From the list of best routes starting with departure, choose the shortest one
-        int bestRouteIndex = 0;
-        double bestDistance = Double.POSITIVE_INFINITY;
-        for(int i=0 ; i<bestRoutes.size() ; ++i) {
-            double distance = 0;
-            for (int j=0 ; j<bestRoutes.get(i).size()-1 ;++j) {
-                distance +=bestRoutes.get(i).get(j).getDistanceWith(bestRoutes.get(i).get(j+1));
-            }
-            distance +=bestRoutes.get(i).get(bestRoutes.get(i).size()-1).getDistanceWith(departure);
-            if (bestDistance > distance) {
-                bestRouteIndex = i;
-                bestDistance = distance;
-            }
-        }
-
-        return new Result(bestRoutes.get(bestRouteIndex), bestDistance);
+        bestRoute.add(departure);
+        return new Result(bestRoute, distance);
     }
 }
 
