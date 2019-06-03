@@ -46,7 +46,7 @@ public class BusinessTraveller {
 
     public static void main(String[] args){
         //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
-        String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/burma12.csv";
+        String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/djibouti38.csv";
         ArrayList<City> cities = null;
         try {
             cities = CSVParser.parseCityList(csv);
@@ -64,13 +64,13 @@ public class BusinessTraveller {
         storeExecutionInfo();
         displayResult(r1);*/
 
-        System.out.println("--------------------------------------------------------------------------------------------");
+        /*System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("Naive solution threaded");
         System.out.println("--------------------------------------------------------------------------------------------");
         startTimer();
         Result r2 = Solver.naiveSolutionThreaded(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
-        displayResult(r2);
+        displayResult(r2);*/
 
 
         System.out.println("--------------------------------------------------------------------------------------------");
@@ -88,5 +88,22 @@ public class BusinessTraveller {
         Result r4 = Solver.planarGraphSolution(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
         displayResult(r4);
+
+        for (int i=0; i<r4.getCourse().size() ; ++i) {
+            System.out.print(r4.getCourse().get(i)+"-");
+        }
+
+        System.out.println("--------------------------------------------------------------------------------------------");
+        System.out.println("Third heuristic: genetic algorithm");
+        System.out.println("--------------------------------------------------------------------------------------------");
+        startTimer();
+        Result r5 = Solver.geneticSolution(new ArrayList<>(cities), cities.get(0), 100, 20, 0.01, 1000);
+        storeExecutionInfo();
+        displayResult(r5);
+
+        for (int i=0; i<r5.getCourse().size() ; ++i) {
+            System.out.print(r5.getCourse().get(i)+"-");
+        }
+
     }
 }
