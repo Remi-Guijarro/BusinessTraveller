@@ -71,8 +71,6 @@ public class TSP {
         }
         assert cities != null;
 
-        /** COMMENT NAIVE SOLUTIONS IF USING DATA SET OF MORE THAN 10 CITIES **/
-
         if(cities.size() <= 10){
             System.out.println("--------------------------------------------------------------------------------------------");
             System.out.println("Naive solution");
