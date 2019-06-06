@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BusinessTraveller {
 
@@ -38,15 +39,30 @@ public class BusinessTraveller {
 
     private static void displayResult(Result r) {
         System.out.println("Solution:");
-        System.out.println(" "+r.getCourse());
+        System.out.println(" "+formatList(r.getCourse(), '-'));
         System.out.println(" Distance: "+r.getDistance());
         System.out.println("Performance:");
         System.out.println(executionInfo);
     }
 
+    private static <T> String formatList(List<T> list, char separator) {
+        StringBuilder result = new StringBuilder();
+        for (int i=0 ; i<list.size()-1 ; ++i) {
+            result.append(list.get(i)).append(separator);
+        }
+        result.append(list.get(list.size()-1));
+        return result.toString();
+    }
+
     public static void main(String[] args){
+        if (args.length != 1)
+        {
+            System.err.println("Error: one argument required: path to csv file.");
+            return;
+        }
         //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
-        String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/djibouti38.csv";
+        //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/djibouti38.csv";
+        String csv = args[0];
         ArrayList<City> cities = null;
         try {
             cities = CSVParser.parseCityList(csv);
@@ -89,10 +105,6 @@ public class BusinessTraveller {
         storeExecutionInfo();
         displayResult(r4);
 
-        for (int i=0; i<r4.getCourse().size() ; ++i) {
-            System.out.print(r4.getCourse().get(i)+"-");
-        }
-
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("Third heuristic: genetic algorithm");
         System.out.println("--------------------------------------------------------------------------------------------");
@@ -100,10 +112,6 @@ public class BusinessTraveller {
         Result r5 = Solver.geneticSolution(new ArrayList<>(cities), cities.get(0), 50, 20, 0.01, 500);
         storeExecutionInfo();
         displayResult(r5);
-
-        for (int i=0; i<r5.getCourse().size() ; ++i) {
-            System.out.print(r5.getCourse().get(i)+"-");
-        }
 
     }
 }
