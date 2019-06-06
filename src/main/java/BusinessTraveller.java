@@ -72,6 +72,7 @@ public class BusinessTraveller {
         }
         assert cities != null;
 
+        /** COMMENT NAIVE SOLUTIONS IF USING DATA SET OF MORE THAN 10 CITIES **/
         /*System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("Naive solution");
         System.out.println("--------------------------------------------------------------------------------------------");
@@ -87,7 +88,6 @@ public class BusinessTraveller {
         Result r2 = Solver.naiveSolutionThreaded(new ArrayList<>(cities), cities.get(0));
         storeExecutionInfo();
         displayResult(r2);*/
-
 
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("First heuristic: nearest neighbour");
