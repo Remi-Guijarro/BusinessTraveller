@@ -81,14 +81,17 @@ public class TSP {
             Result r1 = Solver.naiveSolution(new ArrayList<>(cities), cities.get(0));
             storeExecutionInfo();
             displayResult(r1);
-
-            System.out.println("--------------------------------------------------------------------------------------------");
-            System.out.println("Naive solution threaded");
-            System.out.println("--------------------------------------------------------------------------------------------");
-            startTimer();
-            Result r2 = Solver.naiveSolutionThreaded(new ArrayList<>(cities), cities.get(0));
-            storeExecutionInfo();
-            displayResult(r2);
+            try{
+                System.out.println("--------------------------------------------------------------------------------------------");
+                System.out.println("Naive solution threaded");
+                System.out.println("--------------------------------------------------------------------------------------------");
+                startTimer();
+                Result r2 = Solver.naiveSolutionThreaded(new ArrayList<>(cities), cities.get(0));
+                storeExecutionInfo();
+                displayResult(r2);
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
         } else {
             System.err.println("Naive solutions won't be executed because chosen data set is too large");
         }

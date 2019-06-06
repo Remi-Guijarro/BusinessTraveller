@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="business-traveller" />
         <module name="travelling_salesman_problem" />
+        <module name="TSP" />
       </profile>
     </annotationProcessing>
   </component>
