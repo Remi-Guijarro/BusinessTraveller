@@ -14,9 +14,9 @@ public class CSVParserTest {
         // Get the absolute path
         String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
 
-        Map<Integer,City> cities = null;
+         cities = null;
         try {
-            cities = CSVParser.parseCityTreeMap(csv);
+            cities = CSVParser.parseCityList(csv);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

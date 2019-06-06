@@ -1,2 +1,2 @@
-# BusinessTraveller
-Advanced programming project that aims at resolving the BusinessTraveller graph problem 
+# TSP
+Advanced programming project that aims at resolving the TSP graph problem 
