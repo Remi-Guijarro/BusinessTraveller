@@ -60,8 +60,7 @@ public class TSP {
             System.err.println("Error: one argument required: path to csv file.");
             return;
         }
-        //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/test10.csv";
-        //String csv = Paths.get("").toAbsolutePath().normalize().toString() + "/src/main/resources/data/djibouti38.csv";
+
         String csv = args[0];
         ArrayList<City> cities = null;
         try {
@@ -73,21 +72,27 @@ public class TSP {
         assert cities != null;
 
         /** COMMENT NAIVE SOLUTIONS IF USING DATA SET OF MORE THAN 10 CITIES **/
-        /*System.out.println("--------------------------------------------------------------------------------------------");
-        System.out.println("Naive solution");
-        System.out.println("--------------------------------------------------------------------------------------------");
-        startTimer();
-        Result r1 = Solver.naiveSolution(new ArrayList<>(cities), cities.get(0));
-        storeExecutionInfo();
-        displayResult(r1);*/
 
-        /*System.out.println("--------------------------------------------------------------------------------------------");
-        System.out.println("Naive solution threaded");
-        System.out.println("--------------------------------------------------------------------------------------------");
-        startTimer();
-        Result r2 = Solver.naiveSolutionThreaded(new ArrayList<>(cities), cities.get(0));
-        storeExecutionInfo();
-        displayResult(r2);*/
+        if(cities.size() <= 10){
+            System.out.println("--------------------------------------------------------------------------------------------");
+            System.out.println("Naive solution");
+            System.out.println("--------------------------------------------------------------------------------------------");
+            startTimer();
+            Result r1 = Solver.naiveSolution(new ArrayList<>(cities), cities.get(0));
+            storeExecutionInfo();
+            displayResult(r1);
+
+            System.out.println("--------------------------------------------------------------------------------------------");
+            System.out.println("Naive solution threaded");
+            System.out.println("--------------------------------------------------------------------------------------------");
+            startTimer();
+            Result r2 = Solver.naiveSolutionThreaded(new ArrayList<>(cities), cities.get(0));
+            storeExecutionInfo();
+            displayResult(r2);
+        } else {
+            System.err.println("Naive solutions won't be executed because chosen data set is too large");
+        }
+
 
         System.out.println("--------------------------------------------------------------------------------------------");
         System.out.println("First heuristic: nearest neighbour");
